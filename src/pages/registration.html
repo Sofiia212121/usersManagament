@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="/styles/login.css" rel="stylesheet">
+    <title>Login</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <form class="login-form">
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="firstName" class="form-control" id="firstName" placeholder="Enter your First Name"
+                            onfocus="clearPlaceholderEmail()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="secondName" class="form-label">Second Name</label>
+                        <input type="secondName" class="form-control" id="secondName" placeholder="Enter your Second Name"
+                            onfocus="clearPlaceholderPass()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email"
+                            onfocus="clearPlaceholderEmail()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone number</label>
+                        <input type="phone" class="form-control" id="phone" placeholder="Enter your phone number"
+                            onfocus="clearPlaceholderEmail()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                            onfocus="clearPlaceholderPass()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password"
+                            onfocus="clearPlaceholderPass()" required>
+                    </div>
+                    <div class="row justify-content-center mt-4">
+                        <button type="button" onclick="login()" class="btn btn-primary w-50">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function validateLoginForm(email, password) {
+            if (email === '' || password === '') {
+                return false;
+            }
+
+            return true;
+        }
+
+        function login() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!validateLoginForm(email, password)) {
+                alert('Both fields are required');
+                return;
+            }
+
+            const foundUser = users.find(user => user.email === email && user.password === password);
+
+            if (foundUser) {
+                alert('Successfully logged in!');
+                return;
+            }
+
+            alert('Login credentials are incorrect!');
+        }
+
+        function clearPlaceholderEmail() {
+            document.getElementById('email').removeAttribute('placeholder');
+        }
+
+        function clearPlaceholderPass() {
+            document.getElementById('password').removeAttribute('placeholder');
+        }
+
+        const users = [
+            {
+                email: 'vladTrans@gmail.com',
+                password: 'test1234'
+            },
+            {
+                email: 'igor@gmail.com',
+                password: 'test12345'
+            },
+            {
+                email: 'roma@gmail.com',
+                password: 'test123456'
+            }
+        ];
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
