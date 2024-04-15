@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="/styles/login.css" rel="stylesheet">
+    <link href="/usersManagament/src/styles/login.css" rel="stylesheet">
     <title>Login</title>
 </head>
 
@@ -18,12 +18,12 @@
                     <div class="mb-3">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="firstName" class="form-control" id="firstName" placeholder="Enter your First Name"
-                            onfocus="clearPlaceholderEmail()" required>
+                            onfocus="clearPlaceholderFirstName()" required>
                     </div>
                     <div class="mb-3">
                         <label for="secondName" class="form-label">Second Name</label>
                         <input type="secondName" class="form-control" id="secondName" placeholder="Enter your Second Name"
-                            onfocus="clearPlaceholderPass()" required>
+                            onfocus="clearPlaceholderSecondName()" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
@@ -33,7 +33,7 @@
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone number</label>
                         <input type="phone" class="form-control" id="phone" placeholder="Enter your phone number"
-                            onfocus="clearPlaceholderEmail()" required>
+                            onfocus="clearPlaceholderPhone()" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
@@ -43,7 +43,7 @@
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Confirm Password</label>
                         <input type="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password"
-                            onfocus="clearPlaceholderPass()" required>
+                            onfocus="clearPlaceholderConfirmPass()" required>
                     </div>
                     <div class="row justify-content-center mt-4">
                         <button type="button" onclick="login()" class="btn btn-primary w-50">Submit</button>
@@ -81,12 +81,28 @@
             alert('Login credentials are incorrect!');
         }
 
+        function clearPlaceholderFirstName() {
+            document.getElementById('firstName').removeAttribute('placeholder');
+        }
+
+        function clearPlaceholderSecondName() {
+            document.getElementById('secondName').removeAttribute('placeholder');
+        }
+
         function clearPlaceholderEmail() {
             document.getElementById('email').removeAttribute('placeholder');
         }
 
+        function clearPlaceholderPhone() {
+            document.getElementById('phone').removeAttribute('placeholder');
+        }
+
         function clearPlaceholderPass() {
             document.getElementById('password').removeAttribute('placeholder');
+        }
+
+        function clearPlaceholderConfirmPass() {
+            document.getElementById('confirmPassword').removeAttribute('placeholder');
         }
 
         const users = [
