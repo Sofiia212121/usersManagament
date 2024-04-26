@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Manage Users</title>
+</head>
+
+<body>
+    <br>
+    <br>
+    <div class="container">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+    </div>
+
+    <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewUserModalLabel">View User Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="saveUserBtn" type="button" class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNewUserForm">
+                        <div class="mb-3">
+                            <label for="newFirstName" class="form-label">First Name</label>
+                            <input type="newFirstName" class="form-control" id="newFirstName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newLastName" class="form-label">Second Name</label>
+                            <input type="newLastName" class="form-control" id="newLastName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newEmail" class="form-label">Email address</label>
+                            <input type="newEmail" class="form-control" id="newEmail" equired>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPhone" class="form-label">Phone number</label>
+                            <input type="newPhone" class="form-control" id="newPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" minlength="8" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" minlength="8" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="addNewUserBtn" type="button" class="btn btn-success" data-bs-dismiss="modal">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let users = [
+            {
+                id: 1,
+                firstName: 'Vlad',
+                lastName: 'Trans',
+                email: 'vladTrans@gmail.com',
+                phone: '+380982040281',
+            },
+            {
+                id: 2,
+                firstName: 'Igor',
+                lastName: 'Melnik',
+                email: 'igor@gmail.com',
+                phone: '+380982040282',
+            },
+            {
+                id: 3,
+                firstName: 'Roma',
+                lastName: 'Kebab',
+                email: 'kebab@gmail.com',
+                phone: '+380982040283',
+            },
+        ];
+
+        function addUserToTable(user) {
+            document.getElementById('usersTableBody').innerHTML += `
+                <tr data-user-id="${user.id}">
+                    <td>${user.id}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td class="text-center">
+                        <div class="btn-group" role="group">
+                            <button
+                                type="button"
+                                class="btn btn-success viewUserBtn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#viewUserModal"
+                                onclick="viewUser(this)"
+                            >View</button>
+                            <button
+                                type="button"
+                                class="btn btn-primary editUserBtn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editUserModal"
+                                onclick="editUser(this)"
+                            >Edit</button>
+                            <button
+                            type="button"
+                            class="btn btn-danger deleteUserBtn"
+                            onclick="deleteUser(this)"
+                            >Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function viewUser(button) {
+            const user = getUserByButton(button);
+
+            if (!user) {
+                return;
+            }
+
+            document.querySelector('#viewUserModal div.modal-body').innerHTML = `
+                <p>
+                    <strong>Id:</strong>
+                    ${user.id}
+                </p>
+                <p>
+                    <strong>Name:</strong>
+                    ${user.firstName} ${user.lastName}
+                </p>
+                <p>
+                    <strong>Email:</strong>
+                    ${user.email}
+                </p>
+                <p>
+                    <strong>Phone:</strong>
+                    ${user.phone}
+                </p>
+            `;
+        }
+
+        function editUser(button) {
+            const user = getUserByButton(button);
+
+            if (!user) {
+                return;
+            }
+
+            document.querySelector('#editUserModal div.modal-body').innerHTML = `
+                <form>
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">Id</label>
+                        <input type="text" class="form-control" id="userId" disabled value="${user.id}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" value="${user.firstName}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" value="${user.lastName}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" value="${user.email}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="phone" value="${user.phone}">
+                    </div>
+                </form>
+            `;
+        }
+
+        function deleteUser(button) {
+            const user = getUserByButton(button);
+
+            if (!user) {
+                return;
+            }
+
+            button.parentElement.parentElement.parentElement.remove();
+            users = users.filter(record => record.id !== user.id);
+        }
+
+        function getUserByButton(button) {
+            const userId = +button.parentElement.parentElement.parentElement.dataset.userId;
+            const user = users.find(user => user.id === userId);
+
+            if (!user) {
+                alert(`Unable to find a user with "${userId}" id.`);
+                return null;
+            }
+
+            return user;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            for (const user of users) {
+                addUserToTable(user);
+            }
+
+            document.getElementById('addNewUserBtn').addEventListener('click', function () {
+                const newFirstName = document.getElementById('newFirstName').value;
+                const newLastName = document.getElementById('newLastName').value;
+                const newEmail = document.getElementById('newEmail').value;
+                const newPhone = document.getElementById('newPhone').value;
+
+                const newUser = {
+                    id: users.length + 1,
+                    firstName: newFirstName,
+                    lastName: newLastName,
+                    email: newEmail,
+                    phone: newPhone,
+                };
+
+                addUserToTable(newUser);
+                users.push(newUser);
+                document.getElementById('addNewUserForm').reset();
+            });
+
+            document.getElementById('saveUserBtn').addEventListener('click', function () {
+                const userId = +document.getElementById('userId').value;
+
+                for (const user of users) {
+                    if (user.id === userId) {
+                        user.firstName = document.getElementById('firstName').value;
+                        user.lastName = document.getElementById('lastName').value;
+                        user.email = document.getElementById('email').value;
+                        user.phone = document.getElementById('phone').value;
+
+                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(2)`).innerHTML = user.firstName;
+                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(3)`).innerHTML = user.lastName;
+                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(4)`).innerHTML = user.email;
+                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(5)`).innerHTML = user.phone;
+
+                        break;
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

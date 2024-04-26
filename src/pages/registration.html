@@ -11,6 +11,24 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JS Begginers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page"
+                        href="/usersManagament/src/pages/login.html">Login</a>
+                    <a class="nav-link" href="/usersManagament/src/pages/registration.html">Registration</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <br>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-5">
@@ -18,35 +36,35 @@
                     <div class="mb-3">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="firstName" class="form-control" id="firstName" placeholder="Enter your First Name"
-                            onfocus="clearPlaceholderFirstName()" required>
+                            onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="mb-3">
                         <label for="secondName" class="form-label">Second Name</label>
-                        <input type="secondName" class="form-control" id="secondName" placeholder="Enter your Second Name"
-                            onfocus="clearPlaceholderSecondName()" required>
+                        <input type="secondName" class="form-control" id="secondName"
+                            placeholder="Enter your Second Name" onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="email" placeholder="Enter your email"
-                            onfocus="clearPlaceholderEmail()" required>
+                            onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone number</label>
                         <input type="phone" class="form-control" id="phone" placeholder="Enter your phone number"
-                            onfocus="clearPlaceholderPhone()" required>
+                            onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
-                            onfocus="clearPlaceholderPass()" required>
+                        <input type="password" class="form-control" id="password" minlength="8"
+                            placeholder="Enter your password" onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password"
-                            onfocus="clearPlaceholderConfirmPass()" required>
+                        <input type="password" class="form-control" id="confirmPassword" minlength="8"
+                            placeholder="Confirm Password" onfocus="clearPlaceholder(this)" required>
                     </div>
                     <div class="row justify-content-center mt-4">
-                        <button type="button" onclick="login()" class="btn btn-primary w-50">Submit</button>
+                        <button type="submit" class="btn btn-primary w-50">Submit</button>
                     </div>
                 </form>
             </div>
@@ -54,55 +72,63 @@
     </div>
 
     <script type="text/javascript">
-        function validateLoginForm(email, password) {
-            if (email === '' || password === '') {
-                return false;
-            }
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPssword = document.getElementById('confirmPassword').value;
 
-            return true;
+            return password === confirmPssword;
         }
 
-        function login() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementsByClassName('login-form')[0].addEventListener('submit', function (event) {
+                console.log(1);
+                event.preventDefault();
+                if (!validatePasswords()) {
+                    alert('Passwords must be the same');
+                    return;
+                }
 
-            if (!validateLoginForm(email, password)) {
-                alert('Both fields are required');
-                return;
-            }
+                // новий юзер
+                const firstName = document.getElementById('firstName').value;
+                const secondName = document.getElementById('secondName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
 
-            const foundUser = users.find(user => user.email === email && user.password === password);
+                const newUser = {
+                    firstName: firstName,
+                    secondName: secondName,
+                    email: email,
+                    phone: phone,
+                    password: password
+                };
 
-            if (foundUser) {
-                alert('Successfully logged in!');
-                return;
-            }
+                users.push(newUser);
 
-            alert('Login credentials are incorrect!');
-        }
+                alert('Registration successful!');
 
-        function clearPlaceholderFirstName() {
-            document.getElementById('firstName').removeAttribute('placeholder');
-        }
+                // перезавантажуємо форму після збереження юзера
+                document.getElementsByClassName('login-form')[0].reset();
+            });
 
-        function clearPlaceholderSecondName() {
-            document.getElementById('secondName').removeAttribute('placeholder');
-        }
+            const formElements = document.querySelectorAll('form.login-form input');
+            console.log(formElements);
 
-        function clearPlaceholderEmail() {
-            document.getElementById('email').removeAttribute('placeholder');
-        }
+            // пробігтися циклом по всіх елементах і кожному дадати прослуховувач події focus, і використати функцію clearPlaceholder
+            formElements.forEach(function (element) {
+                element.dataset.placeholder = element.placeholder;
 
-        function clearPlaceholderPhone() {
-            document.getElementById('phone').removeAttribute('placeholder');
-        }
+                element.addEventListener('focus', function () { // текст прибирається
+                    clearPlaceholder(this);
+                });
+                element.addEventListener('blur', function () {
+                    element.placeholder = element.dataset.placeholder; // текст з'являється
+                });
+            });
+        });
 
-        function clearPlaceholderPass() {
-            document.getElementById('password').removeAttribute('placeholder');
-        }
-
-        function clearPlaceholderConfirmPass() {
-            document.getElementById('confirmPassword').removeAttribute('placeholder');
+        function clearPlaceholder(element) {
+            document.getElementById(element.id).removeAttribute('placeholder');
         }
 
         const users = [
@@ -124,4 +150,5 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 </body>
+
 </html>

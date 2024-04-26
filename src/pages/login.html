@@ -11,6 +11,24 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JS Begginers</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active" aria-current="page"
+                        href="/usersManagament/src/pages/login.html">Login</a>
+                    <a class="nav-link" href="/usersManagament/src/pages/registration.html">Registration</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <br>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-lg-5">
@@ -26,7 +44,7 @@
                             onfocus="clearPlaceholderPass()" required>
                     </div>
                     <div class="row justify-content-center mt-4">
-                        <button type="button" onclick="login()" class="btn btn-primary w-50">Submit</button>
+                        <button type="submit" class="btn btn-primary w-50">Submit</button>
                     </div>
                 </form>
             </div>
@@ -34,17 +52,9 @@
     </div>
 
     <script type="text/javascript">
-        function validateLoginForm(email, password) {
-            if (email === '' || password === '') {
-                return false;
-            }
-
-            return true;
-        }
-
         function login() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
             if (!validateLoginForm(email, password)) {
                 alert('Both fields are required');
@@ -60,6 +70,13 @@
 
             alert('Login credentials are incorrect!');
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementsByClassName('login-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+                login();
+            });
+        });
 
         function clearPlaceholderEmail() {
             document.getElementById('email').removeAttribute('placeholder');
