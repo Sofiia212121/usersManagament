@@ -4,30 +4,83 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+    >
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <style>
+        .clickable:hover {
+            cursor: pointer;
+            color: aquamarine;
+        }
+    </style>
     <title>Manage Users</title>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JS Beginners</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/usersManagament/src/pages/users.html">Manage Users</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#" onclick="redirectToLoginPage()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <br>
     <br>
     <div class="container">
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
+                    <th scope="col">
+                        <span class="clickable" data-sort="id">id</span>
+                        <span class="sortIcon"></span>
+                    </th>
+                    <th scope="col">
+                        <span class="clickable" data-sort="firstName">First Name</span>
+                        <span class="sortIcon"></span>
+                    </th>
+                    <th scope="col">
+                        <span class="clickable" data-sort="lastName">Last Name</span>
+                        <span class="sortIcon"></span>
+                    </th>
+                    <th scope="col">
+                        <span class="clickable" data-sort="email">Email</span>
+                        <span class="sortIcon"></span>
+                    </th>
+                    <th scope="col">
+                        <span class="clickable" data-sort="phone">Phone</span>
+                        <span class="sortIcon"></span>
+                    </th>
                     <th scope="col" class="text-center">Actions</th>
                 </tr>
             </thead>
-            <tbody id="usersTableBody">
-            </tbody>
+            <tbody id="usersTableBody"></tbody>
         </table>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewUserModal">Add New</button>
     </div>
 
     <div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserModalLabel" aria-hidden="true">
@@ -55,79 +108,79 @@
                 <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="saveUserBtn" type="button" class="btn btn-success" data-bs-dismiss="modal">Save</button>
+                    <button id="saveUserBtn" type="button" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addNewUserModal" tabindex="-1" aria-labelledby="addNewUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+                    <h5 class="modal-title" id="addNewUserModalLabel">Add New User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addNewUserForm">
                         <div class="mb-3">
                             <label for="newFirstName" class="form-label">First Name</label>
-                            <input type="newFirstName" class="form-control" id="newFirstName" required>
+                            <input type="text" class="form-control" id="newFirstName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="newLastName" class="form-label">Second Name</label>
-                            <input type="newLastName" class="form-control" id="newLastName" required>
+                            <label for="newlastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="newLastName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="newEmail" class="form-label">Email address</label>
-                            <input type="newEmail" class="form-control" id="newEmail" equired>
+                            <label for="newEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="newEmail" required>
                         </div>
                         <div class="mb-3">
-                            <label for="newPhone" class="form-label">Phone number</label>
-                            <input type="newPhone" class="form-control" id="newPhone" required>
+                            <label for="newPhone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="newPhone" required>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" minlength="8" required>
+                            <label for="newPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="newPassword" minlength="8" required>
                         </div>
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" minlength="8" required>
+                            <label for="newPasswordConfirmation" class="form-label">Password Confirmation</label>
+                            <input type="password" class="form-control" id="newPasswordConfirmation" minlength="8" required>
                         </div>
+                        <button id="submitNewUser" type="submit" class="btn btn-primary" style="display: none;">Submit</button>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="addNewUserBtn" type="button" class="btn btn-success" data-bs-dismiss="modal">Add</button>
+                    <button id="saveNewUserBtn" type="button" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
     </div>
-
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/passwords.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/redirections.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/users_db_mock.js"></script>
     <script type="text/javascript">
-        let users = [
-            {
-                id: 1,
-                firstName: 'Vlad',
-                lastName: 'Trans',
-                email: 'vladTrans@gmail.com',
-                phone: '+380982040281',
-            },
-            {
-                id: 2,
-                firstName: 'Igor',
-                lastName: 'Melnik',
-                email: 'igor@gmail.com',
-                phone: '+380982040282',
-            },
-            {
-                id: 3,
-                firstName: 'Roma',
-                lastName: 'Kebab',
-                email: 'kebab@gmail.com',
-                phone: '+380982040283',
-            },
-        ];
+        let sortColumn = null;
+        let sortDirection = null;
+
+        function getUserByButton(button) {
+            const userId = +button.parentElement.parentElement.parentElement.dataset.userId;
+            const user = usersStorage.find(userId);
+
+            if (!user) {
+                alert(`Unable to find a user with "${userId}" id.`);
+                return null;
+            }
+
+            return user;
+        }
 
         function addUserToTable(user) {
             document.getElementById('usersTableBody').innerHTML += `
@@ -141,22 +194,22 @@
                         <div class="btn-group" role="group">
                             <button
                                 type="button"
-                                class="btn btn-success viewUserBtn"
+                                class="btn btn-success"
                                 data-bs-toggle="modal"
                                 data-bs-target="#viewUserModal"
-                                onclick="viewUser(this)"
+                                onclick="clickViewUserBtn(this)"
                             >View</button>
                             <button
                                 type="button"
-                                class="btn btn-primary editUserBtn"
+                                class="btn btn-primary"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editUserModal"
-                                onclick="editUser(this)"
+                                onclick="clickEditUserBtn(this)"
                             >Edit</button>
                             <button
-                            type="button"
-                            class="btn btn-danger deleteUserBtn"
-                            onclick="deleteUser(this)"
+                                type="button"
+                                class="btn btn-danger"
+                                onclick="clickDeleteUserBtn(this)"
                             >Delete</button>
                         </div>
                     </td>
@@ -164,7 +217,18 @@
             `;
         }
 
-        function viewUser(button) {
+        function clickDeleteUserBtn(button) {
+            const user = getUserByButton(button);
+
+            if (!user) {
+                return;
+            }
+
+            button.parentElement.parentElement.parentElement.remove();
+            usersStorage.delete(user.id);
+        }
+
+        function clickViewUserBtn(button) {
             const user = getUserByButton(button);
 
             if (!user) {
@@ -191,7 +255,7 @@
             `;
         }
 
-        function editUser(button) {
+        function clickEditUserBtn(button) {
             const user = getUserByButton(button);
 
             if (!user) {
@@ -220,81 +284,160 @@
                         <label for="phone" class="form-label">Phone</label>
                         <input type="text" class="form-control" id="phone" value="${user.phone}">
                     </div>
+                    <div class="mb-3">
+                        <label for="oldPassword" class="form-label">Old Password</label>
+                        <input type="password" class="form-control" id="oldPassword" minlength="8" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" minlength="8" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="passwordConfirmation" class="form-label">Password Confirmation</label>
+                        <input type="password" class="form-control" id="passwordConfirmation" minlength="8" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="display: none;">Submit</button>
                 </form>
             `;
+
+            document.querySelector('#editUserModal div.modal-body form').addEventListener('submit', handleUserEditFormSubmit);
         }
 
-        function deleteUser(button) {
-            const user = getUserByButton(button);
+        function handleUserEdit() {
+            document.getElementById('saveUserBtn').addEventListener('click', function () {
+                this.parentElement.parentElement.querySelector('form > button').click();
+            });
+        }
 
-            if (!user) {
+        function handleUserEditFormSubmit(event) {
+            event.preventDefault();
+            const userId = +document.getElementById('userId').value;
+            let user = null;
+
+            if (!validatePasswordAndConfirmation()) {
                 return;
             }
 
-            button.parentElement.parentElement.parentElement.remove();
-            users = users.filter(record => record.id !== user.id);
-        }
-
-        function getUserByButton(button) {
-            const userId = +button.parentElement.parentElement.parentElement.dataset.userId;
-            const user = users.find(user => user.id === userId);
-
-            if (!user) {
-                alert(`Unable to find a user with "${userId}" id.`);
-                return null;
+            try {
+                user = usersStorage.update(userId, {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    oldPassword: document.getElementById('oldPassword').value,
+                    password: document.getElementById('password').value,
+                });
+            } catch (error) {
+                alert(error.message);
+                return;
             }
 
-            return user;
+            document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(2)`).innerHTML = user.firstName;
+            document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(3)`).innerHTML = user.lastName;
+            document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(4)`).innerHTML = user.email;
+            document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(5)`).innerHTML = user.phone;
+
+            let modal = document.getElementById('editUserModal');
+            modal = bootstrap.Modal.getInstance(modal);
+            modal.hide();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            for (const user of users) {
+        function handleNewUserSave() {
+            document.getElementById('addNewUserForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (!validatePasswordAndConfirmation('newPassword', 'newPasswordConfirmation')) {
+                    return;
+                }
+
+                const user = usersStorage.add({
+                    firstName: document.getElementById('newFirstName').value,
+                    lastName: document.getElementById('newLastName').value,
+                    email: document.getElementById('newEmail').value,
+                    phone: document.getElementById('newPhone').value,
+                    password: document.getElementById('newPassword').value,
+                });
+
                 addUserToTable(user);
-            }
 
-            document.getElementById('addNewUserBtn').addEventListener('click', function () {
-                const newFirstName = document.getElementById('newFirstName').value;
-                const newLastName = document.getElementById('newLastName').value;
-                const newEmail = document.getElementById('newEmail').value;
-                const newPhone = document.getElementById('newPhone').value;
+                let modal = document.getElementById('addNewUserModal');
+                modal = bootstrap.Modal.getInstance(modal);
+                modal.hide();
 
-                const newUser = {
-                    id: users.length + 1,
-                    firstName: newFirstName,
-                    lastName: newLastName,
-                    email: newEmail,
-                    phone: newPhone,
-                };
-
-                addUserToTable(newUser);
-                users.push(newUser);
                 document.getElementById('addNewUserForm').reset();
             });
 
-            document.getElementById('saveUserBtn').addEventListener('click', function () {
-                const userId = +document.getElementById('userId').value;
-
-                for (const user of users) {
-                    if (user.id === userId) {
-                        user.firstName = document.getElementById('firstName').value;
-                        user.lastName = document.getElementById('lastName').value;
-                        user.email = document.getElementById('email').value;
-                        user.phone = document.getElementById('phone').value;
-
-                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(2)`).innerHTML = user.firstName;
-                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(3)`).innerHTML = user.lastName;
-                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(4)`).innerHTML = user.email;
-                        document.querySelector(`tr[data-user-id="${userId}"] > td:nth-child(5)`).innerHTML = user.phone;
-
-                        break;
-                    }
-                }
+            document.getElementById('saveNewUserBtn').addEventListener('click', function () {
+                document.getElementById('submitNewUser').click();
             });
+        }
+
+        function handleSorting() {
+            $('.clickable').click(function () {
+                const upIcon = '<i class="bi bi-sort-up"></i>';
+                const downIcon = '<i class="bi bi-sort-down"></i>';
+                const iconElement = $(this).next();
+                const parentHtml = $(this).parent().html();
+                sortColumn = $(this).data('sort');
+
+                $('.sortIcon').each(function () {
+                    if (parentHtml !== $(this).parent().html()) {
+                        $(this).html('');
+                    }
+                });
+
+                if (iconElement.html() === '' || iconElement.html() === upIcon) {
+                    iconElement.html(downIcon);
+                    sortDirection = 'DESC';
+                } else {
+                    iconElement.html(upIcon);
+                    sortDirection = 'ASC';
+                }
+
+                usersStorage.sort(sortColumn, sortDirection);
+                renderUsersTable();
+            });
+        }
+
+        function renderUsersTable() {
+            usersStorage.init();
+            $('#usersTableBody').html('');
+
+            for (const user of usersStorage.getAll()) {
+                addUserToTable(user);
+            }
+
+            handleUserEdit();
+            handleNewUserSave();
+        }
+
+        // ----------------- WHEN PAGE IS LOADED -----------------
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get a list of users via jQuesry ajax call to API endpoint
+            // $.ajax({
+            //     url: 'http://localhost:3000/users',
+            //     type: 'GET',
+            //     contentType: 'application/json; charset=utf-8',
+            //     dataType: 'json',
+            //     beforeSend: function (xhr) {
+            //         xhr.setRequestHeader('Authorization', 'Bearer ' + getStorageItem('token'));
+            //     },
+            //     success: function (usersResponse) {
+            //         console.log(usersResponse);
+            //     },
+            //     error: function (error) {
+            //         alert(error.responseText);
+            //     },
+            // });
+
+            renderUsersTable();
+            handleSorting();
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"
+    ></script>
 </body>
-
 </html>
