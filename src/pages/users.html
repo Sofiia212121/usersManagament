@@ -133,7 +133,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="newPhone" class="form-label">Phone</label>
-                            <input type="text" class="form-control" id="newPhone" required>
+                            <input type="text" class="form-control phoneMask" id="newPhone" required>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">Password</label>
@@ -154,10 +154,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/constants.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/passwords.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/redirections.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/token_storage.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/phone_mask.js"></script>
     <script type="text/javascript">
         let sortColumn = null;
         let sortDirection = null;
@@ -294,22 +296,23 @@
                             </div>
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstName" value="${user.firstName}">
+                                <input type="text" class="form-control" id="firstName" required value="${user.firstName}">
                             </div>
                             <div class="mb-3">
                                 <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" value="${user.lastName}">
+                                <input type="text" class="form-control" id="lastName" required value="${user.lastName}">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" value="${user.email}">
+                                <input type="email" class="form-control" id="email" required value="${user.email}">
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="phone" value="${user.phone}">
+                                <input type="text" class="form-control" id="phone" required value="${user.phone}">
                             </div>
                         </form>
                     `);
+                    applyPhoneMask('#phone');
                     $('#editUserModal div.modal-body form').submit(handleUserEditFormSubmit);
                 },
                 error: function (error) {
@@ -324,9 +327,13 @@
             })
         }
 
-        // @todo: validate the form
         function handleUserEditFormSubmit(event) {
             event.preventDefault();
+
+            if (!this.reportValidity()) {
+                return;
+            }
+
             const userId = +$('#userId').val();
             console.log(userId);
 
@@ -359,32 +366,41 @@
         }
 
         function handleNewUserSave() {
-            document.getElementById('addNewUserForm').addEventListener('submit', function (e) {
+            $('#addNewUserForm').submit(function (e) {
                 e.preventDefault();
 
-                if (!validatePasswordAndConfirmation('newPassword', 'newPasswordConfirmation')) {
+                if (!this.reportValidity()) {
                     return;
                 }
 
-                const user = usersStorage.add({
-                    firstName: document.getElementById('newFirstName').value,
-                    lastName: document.getElementById('newLastName').value,
-                    email: document.getElementById('newEmail').value,
-                    phone: document.getElementById('newPhone').value,
-                    password: document.getElementById('newPassword').value,
+                $.ajax({
+                    url: `${apiHost}/register`,
+                    type: 'POST',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        email: $('#newEmail').val(),
+                        firstName: $('#newFirstName').val(),
+                        lastName: $('#newLastName').val(),
+                        phone: $('#newPhone').val(),
+                        password: $('#newPassword').val(),
+                    }),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+                    },
+                    success: function (user) {
+                        addUserToTable(user);
+                        $('#addNewUserModal').modal('hide');
+                        $('#addNewUserForm').trigger('reset');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
                 });
-
-                addUserToTable(user);
-
-                let modal = document.getElementById('addNewUserModal');
-                modal = bootstrap.Modal.getInstance(modal);
-                modal.hide();
-
-                document.getElementById('addNewUserForm').reset();
             });
 
-            document.getElementById('saveNewUserBtn').addEventListener('click', function () {
-                document.getElementById('submitNewUser').click();
+            $('#saveNewUserBtn').click(function () {
+                $('#addNewUserForm').submit();
             });
         }
 
