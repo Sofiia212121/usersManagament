@@ -66,17 +66,14 @@
     <script type="text/javascript" src="/usersManagament/src/scripts/redirections.js"></script>
     <script type="text/javascript">
         function login() {
-            const email = $('#email').val();
-            const password = $('#password').val();
-
             $.ajax({
                 url: `${apiHost}/login`,
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 data: JSON.stringify({
-                    email: email,
-                    password: password,
+                    email: $('#email').val(),
+                    password: $('#password').val(),
                 }),
                 success: function (response) {
                     alert('Successfully login!');

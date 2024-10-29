@@ -2,8 +2,8 @@ function validatePasswordAndConfirmation(
     passwordElementId = 'password',
     passwordConfirmationElementId = 'passwordConfirmation'
 ) {
-    const password = document.getElementById(passwordElementId).value;
-    const confirmation = document.getElementById(passwordConfirmationElementId).value;
+    const password = $('#' + passwordElementId).val();
+    const confirmation = $('#' + passwordConfirmationElementId).val();
 
     if (password !== confirmation) {
         alert('Passwords mismatch!');
