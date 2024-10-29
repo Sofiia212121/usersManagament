@@ -37,7 +37,7 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#" onclick="redirectToLoginPage()">Logout</a>
+                        <a class="nav-link" aria-current="page" href="#" onclick="logout()">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -160,6 +160,7 @@
     <script type="text/javascript" src="/usersManagament/src/scripts/redirections.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/token_storage.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/phone_mask.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/check_anonymous_user.js"></script>
     <script type="text/javascript">
         let sortColumn = null;
         let sortDirection = null;
@@ -181,7 +182,7 @@
         }
 
         function addUserToTable(user) {
-            document.getElementById('usersTableBody').innerHTML += `
+            $('#usersTableBody').append(`
                 <tr data-user-id="${user.id}">
                     <td>${user.id}</td>
                     <td>${user.firstName}</td>
@@ -212,7 +213,7 @@
                         </div>
                     </td>
                 </tr>
-            `;
+            `);
         }
 
         function clickDeleteUserBtn(button) {
@@ -437,8 +438,13 @@
             }
         }
 
+        function logout() {
+            setToken('');
+            redirectToLoginPage();
+        }
+
         // ----------------- WHEN PAGE IS LOADED -----------------
-        document.addEventListener('DOMContentLoaded', function () {
+        $(document).ready(function () {
             handleUserEdit();
             handleNewUserSave();
             // Get a list of users via jQuesry ajax call to API endpoint
