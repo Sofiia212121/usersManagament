@@ -161,6 +161,7 @@
     <script type="text/javascript" src="/usersManagament/src/scripts/token_storage.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/phone_mask.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/check_anonymous_user.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/add_user.js"></script>
     <script type="text/javascript">
         let sortColumn = null;
         let sortDirection = null;
@@ -374,30 +375,25 @@
                     return;
                 }
 
-                $.ajax({
-                    url: `${apiHost}/register`,
-                    type: 'POST',
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        email: $('#newEmail').val(),
-                        firstName: $('#newFirstName').val(),
-                        lastName: $('#newLastName').val(),
-                        phone: $('#newPhone').val(),
-                        password: $('#newPassword').val(),
-                    }),
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
-                    },
-                    success: function (user) {
-                        addUserToTable(user);
-                        $('#addNewUserModal').modal('hide');
-                        $('#addNewUserForm').trigger('reset');
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    },
-                });
+                const userData = {
+                    email: $('#newEmail').val(),
+                    firstName: $('#newFirstName').val(),
+                    lastName: $('#newLastName').val(),
+                    phone: $('#newPhone').val(),
+                    password: $('#newPassword').val(),
+                };
+
+                const userAddSuccess = function (user) {
+                    addUserToTable(user);
+                    $('#addNewUserModal').modal('hide');
+                    $('#addNewUserForm').trigger('reset');
+                };
+
+                const userAddError = function (error) {
+                    console.log(error);
+                };
+
+                addUser(userData, userAddSuccess, userAddError);
             });
 
             $('#saveNewUserBtn').click(function () {
