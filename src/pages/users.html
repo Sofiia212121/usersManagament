@@ -121,23 +121,24 @@
                     <form id="addNewUserForm">
                         <div class="mb-3">
                             <label for="newFirstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="newFirstName" required>
+                            <input type="text" class="form-control" id="newFirstName" name="firstName" required>
                         </div>
                         <div class="mb-3">
                             <label for="newlastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="newLastName" required>
+                            <input type="text" class="form-control" id="newLastName" name="lastName" required>
                         </div>
                         <div class="mb-3">
                             <label for="newEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="newEmail" required>
+                            <input type="email" class="form-control" id="newEmail" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="newPhone" class="form-label">Phone</label>
-                            <input type="text" class="form-control phoneMask" id="newPhone" required>
+                            <input type="text" class="form-control phoneMask" id="newPhone" name="phone" required>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="newPassword" minlength="8" required>
+                            <input type="password" class="form-control" id="newPassword" minlength="8" name="password"
+                                required>
                         </div>
                         <button id="submitNewUser" type="submit" class="btn btn-primary"
                             style="display: none;">Submit</button>
@@ -162,6 +163,7 @@
     <script type="text/javascript" src="/usersManagament/src/scripts/phone_mask.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/check_anonymous_user.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/add_user.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/form_validation.js"></script>
     <script type="text/javascript">
         let sortColumn = null;
         let sortDirection = null;
@@ -218,6 +220,11 @@
         }
 
         function clickDeleteUserBtn(button) {
+            const confirmedRemoval = confirm('Are you sure?');
+            if (!confirmedRemoval) {
+                return;
+            }
+
             button = $(button);
             const userId = getUserIdByButton(button);
 
@@ -291,26 +298,26 @@
                 },
                 success: function (user) {
                     $('#editUserModal div.modal-body').html(`
-                        <form>
+                        <form id="editUserForm">
                             <div class="mb-3">
                                 <label for="userId" class="form-label">Id</label>
                                 <input type="text" class="form-control" id="userId" disabled value="${user.id}">
                             </div>
                             <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstName" required value="${user.firstName}">
+                                <input type="text" class="form-control" id="firstName" name="firstName" required value="${user.firstName}">
                             </div>
                             <div class="mb-3">
                                 <label for="lastName" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastName" required value="${user.lastName}">
+                                <input type="text" class="form-control" id="lastName" name="lastName" required value="${user.lastName}">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required value="${user.email}">
+                                <input type="email" class="form-control" id="email" name="email" required value="${user.email}">
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="phone" required value="${user.phone}">
+                                <input type="text" class="form-control" id="phone" name="phone" required value="${user.phone}">
                             </div>
                         </form>
                     `);
@@ -337,7 +344,6 @@
             }
 
             const userId = +$('#userId').val();
-            console.log(userId);
 
             $.ajax({
                 url: `${apiHost}/users/${userId}`,
@@ -362,7 +368,7 @@
                     $('#editUserModal').modal('hide');
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON, '#editUserForm');
                 },
             });
         }
@@ -390,7 +396,7 @@
                 };
 
                 const userAddError = function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON, '#addNewUserForm');
                 };
 
                 addUser(userData, userAddSuccess, userAddError);

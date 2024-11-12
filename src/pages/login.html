@@ -64,6 +64,7 @@
     <script type="text/javascript" src="/usersManagament/src/scripts/token_storage.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/constants.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/redirections.js"></script>
+    <script type="text/javascript" src="/usersManagament/src/scripts/form_validation.js"></script>
     <script type="text/javascript" src="/usersManagament/src/scripts/check_autorized_user.js"></script>
     <script type="text/javascript">
         function login() {
@@ -82,7 +83,7 @@
                     redirectToUsersPage();
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON, '#loginForm');
                 },
             });
         }
