@@ -1,4 +1,4 @@
-function displayFormErrors(errorResponse, formSelector) {
+function displayFormErrors(errorResponse, formSelector = '') {
     if (!errorResponse.validationErrors) {
         alert(errorResponse.errorMessage);
         return;
@@ -37,6 +37,10 @@ function displayFormErrors(errorResponse, formSelector) {
 }
 
 function getFormFields(formSelector) {
+    if (!formSelector) {
+        return {};
+    }
+    
     const fieldSelectors = {};
     $(formSelector).find('input').each(function () {
         const name = $(this).attr('name');

@@ -140,13 +140,47 @@
                             <input type="password" class="form-control" id="newPassword" minlength="8" name="password"
                                 required>
                         </div>
-                        <button id="submitNewUser" type="submit" class="btn btn-primary"
-                            style="display: none;">Submit</button>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="saveNewUserBtn" type="button" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">Change password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <input type="hidden" id="userIdToChangePassword" />
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" minlength="8" name="password"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPasswordToChange" class="form-label">New Password</label>
+                            <input type="password" class="form-control" id="newPasswordToChange" minlength="8"
+                                name="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="passwordConfirmation" class="form-label">Password Confirmation</label>
+                            <input type="password" class="form-control" id="passwordConfirmation" minlength="8"
+                                name="passwordConfirmation" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="saveUserPasswordBtn" type="button" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -213,10 +247,66 @@
                                 class="btn btn-danger"
                                 onclick="clickDeleteUserBtn(this)"
                             >Delete</button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onclick="clickChangePasswordBtn(this)"
+                            >Change Password</button>
                         </div>
                     </td>
                 </tr>
             `);
+        }
+
+        function clickChangePasswordBtn(button) {
+            button = $(button);
+            const userId = getUserIdByButton(button);
+            $('#changePasswordForm').trigger('reset');
+            $('#changePasswordModal').modal('show');
+            $('#userIdToChangePassword').val(userId);
+        }
+
+        function handleChangePassword() {
+            $('#saveUserPasswordBtn').click(function () {
+                $('#changePasswordForm').submit();
+            });
+
+            $('#changePasswordForm').submit(function (e) {
+                e.preventDefault();
+
+                if (!this.reportValidity()) {
+                    return;
+                }
+
+                const password = $('#password').val();
+                const newPassword = $('#newPasswordToChange').val();
+                const passwordConfirmation = $('#passwordConfirmation').val();
+
+                const userId = $('#userIdToChangePassword').val();
+
+                $.ajax({
+                    url: `${apiHost}/users/update-password/${userId}`,
+                    type: 'PATCH',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        password: password,
+                        newPassword: newPassword,
+                        passwordConfirmation: passwordConfirmation
+                    }),
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+                    },
+                    success: function () {
+                        alert('The password was successfully updated.');
+
+                        $('#changePasswordModal').modal('hide');
+                    },
+                    error: function (error) {
+                        displayFormErrors(error.responseJSON, '#changePasswordForm');
+                    },
+                });
+            });
         }
 
         function clickDeleteUserBtn(button) {
@@ -241,7 +331,7 @@
                     button.parent().parent().parent().remove();
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON);
                 },
             });
         }
@@ -279,7 +369,7 @@
                     `);
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON);
                 },
             });
         }
@@ -325,7 +415,7 @@
                     $('#editUserModal div.modal-body form').submit(handleUserEditFormSubmit);
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON);
                 },
             });
         }
@@ -449,6 +539,7 @@
         $(document).ready(function () {
             handleUserEdit();
             handleNewUserSave();
+            handleChangePassword();
             // Get a list of users via jQuesry ajax call to API endpoint
             $.ajax({
                 url: `${apiHost}/users`,
@@ -463,7 +554,7 @@
                     handleSorting();
                 },
                 error: function (error) {
-                    console.log(error);
+                    displayFormErrors(error.responseJSON);
                 },
             });
         });
